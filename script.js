@@ -2,7 +2,6 @@
 const checkForm = document.getElementById('checkForm');
 const urlInput = document.getElementById('url');
 const resultDiv = document.getElementById('result');
-const loadingP = document.getElementById('loading');
 const submitButton = checkForm.querySelector('button');
 
 
@@ -111,15 +110,6 @@ checkForm.addEventListener('submit', async (event) => {
 
 
 
-    //     const dnsResult = await checkDNS(url);
-    //     const httpsResult = await checkHTTPS(url);
-
-    //     resultDiv.innerHTML = `
-    //     <p>Status: ${dnsResult.status}</p>
-    //     <p>${dnsResult.tip}</p>
-    //     <p>Status: ${httpsResult.status}</p>
-    //     <p>${httpsResult.tip}</p>
-    // `;
     finally {
         submitButton.disabled = false;
         submitButton.textContent = "Check Website";
@@ -164,30 +154,6 @@ async function checkDNS(url) {
 
 
 };
-
-
-// async function checkHTTPS(url) {
-//     const website = new URL(url);
-//     const httpsUrl = `https://${website.hostname}`;
-
-
-//     try {
-//         const response = await fetch(httpsUrl);
-
-//         return {
-//             status: "pass",
-//             tip: "HTTPS connection succeeded."
-//         };
-//     } catch (error) {
-//         console.error("Error checking HTTPS:", error);
-
-//         return {
-//             status: "fail",
-//             tip: "Could not verify the HTTPS connection from your browser."
-//         };
-//     }
-// }
-
 
 
 
@@ -273,10 +239,13 @@ async function checkReachability(url) {
 
 
 
+
 function calculateHealthScore(results) {
+    const scoredResults = results.slice(0, 4);
+
     let points = 0;
 
-    results.forEach((result) => {
+    scoredResults.forEach((result) => {
         if (result.status === "pass") {
             points += 1;
         } else if (result.status === "warn") {
@@ -284,10 +253,11 @@ function calculateHealthScore(results) {
         }
     });
 
-    const score = Math.round((points / results.length) * 100);
+    const score = Math.round((points / scoredResults.length) * 100);
 
     return score;
 }
+
 
 
 
